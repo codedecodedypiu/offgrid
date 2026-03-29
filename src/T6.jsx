@@ -129,7 +129,7 @@ const CustomCursor = () => {
 
 /* ─── MARQUEE ─── */
 const Marquee = () => {
-  const txt = "OFFGRID 1.0   CODE DECODE CLUB   DY PATIL INTERNATIONAL UNIVERSITY   HARDWARE   SOFTWARE   REGISTER NOW   APRIL 2026   AKURDI PUNE   ";
+  const txt = "OFFGRID 1.0   CODE DECODE CLUB   D Y PATIL INTERNATIONAL UNIVERSITY   HARDWARE   SOFTWARE   REGISTER NOW   APRIL 2026   AKURDI PUNE   ";
   return (
     <div style={{ background:COL.pink, borderTop:"4px solid black", borderBottom:"4px solid black", padding:"12px 0", overflow:"hidden", whiteSpace:"nowrap" }}>
       <div style={{ display:"inline-block", animation:"marquee 28s linear infinite" }}>
@@ -304,15 +304,47 @@ export default function OFFGRID() {
             </div>
           </div>
           <nav className="nav-links" style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
-            {["ABOUT","TRACKS","TIMELINE","FAQ","REGISTER"].map(n => (
-              <a key={n} href={`#${n.toLowerCase()}`}
-                style={{ ...mono, fontWeight:700, fontSize:"0.7rem", letterSpacing:"0.12em", textTransform:"uppercase", textDecoration:"none", padding:"6px 14px", border:"3px solid black", background:COL.white, boxShadow:"3px 3px 0 black", color:"black", transition:"all .1s" }}
-                onMouseEnter={e=>{ e.currentTarget.style.background=COL.yellow; e.currentTarget.style.transform="translate(-2px,-2px)"; e.currentTarget.style.boxShadow="5px 5px 0 black"; }}
-                onMouseLeave={e=>{ e.currentTarget.style.background=COL.white; e.currentTarget.style.transform="translate(0,0)"; e.currentTarget.style.boxShadow="3px 3px 0 black"; }}>
-                {n}
-              </a>
-            ))}
-          </nav>
+  {["ABOUT","TRACKS","TIMELINE","FAQ","REGISTER"].map(n => (
+    <a 
+      key={n} 
+      href={n === "REGISTER" 
+        ? "https://unstop.com/p/offgrid-10-codedecode-dypiu-1666935" 
+        : `#${n.toLowerCase()}`
+      }
+      target={n === "REGISTER" ? "_blank" : "_self"}
+      rel={n === "REGISTER" ? "noopener noreferrer" : ""}
+      
+      style={{ 
+        ...mono, 
+        fontWeight:700, 
+        fontSize:"0.7rem", 
+        letterSpacing:"0.12em", 
+        textTransform:"uppercase", 
+        textDecoration:"none", 
+        padding:"6px 14px", 
+        border:"3px solid black", 
+        background:COL.white, 
+        boxShadow:"3px 3px 0 black", 
+        color:"black", 
+        transition:"all .1s" 
+      }}
+
+      onMouseEnter={e=>{
+        e.currentTarget.style.background=COL.yellow; 
+        e.currentTarget.style.transform="translate(-2px,-2px)"; 
+        e.currentTarget.style.boxShadow="5px 5px 0 black"; 
+      }}
+
+      onMouseLeave={e=>{
+        e.currentTarget.style.background=COL.white; 
+        e.currentTarget.style.transform="translate(0,0)"; 
+        e.currentTarget.style.boxShadow="3px 3px 0 black"; 
+      }}
+    >
+      {n}
+    </a>
+  ))}
+</nav>
         </div>
       </nav>
 
@@ -326,11 +358,47 @@ export default function OFFGRID() {
               <div style={{ display:"inline-block", background:COL.green, border:"4px solid black", boxShadow:"5px 5px 0 black", padding:"4px 16px", ...mono, fontWeight:700, fontSize:"0.72rem", letterSpacing:"0.15em", textTransform:"uppercase", marginBottom:"2rem" }}>
                 🚀 REGISTRATIONS OPEN — DEADLINE APR 7
               </div>
-              <div style={{ lineHeight:0.85, letterSpacing:"-0.02em", textTransform:"uppercase", marginBottom:"1.5rem" }}>
-                <div style={{ ...mono, fontWeight:700, fontSize:"clamp(5rem,11vw,8.5rem)", display:"block" }}>OFF</div>
-                <div style={{ ...mono, fontWeight:700, fontSize:"clamp(5rem,11vw,8.5rem)", display:"block", color:COL.yellow, textShadow:"3px 3px 0 black", WebkitTextStroke:"2px black" }}>GRID</div>
-                <div style={{ ...mono, fontWeight:700, fontSize:"clamp(2.5rem,5.5vw,4.5rem)", display:"block" }}>1.0</div>
-              </div>
+              <div style={{ 
+  lineHeight: 0.85, 
+  letterSpacing: "-0.02em", 
+  textTransform: "uppercase", 
+  marginBottom: "1.5rem" 
+}}>
+  
+  {/* OFF + GRID same line */}
+  <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+    
+    <span style={{ 
+      ...mono, 
+      fontWeight: 700, 
+      fontSize: "clamp(5rem,11vw,8.5rem)" 
+    }}>
+      OFF
+    </span>
+
+    <span style={{ 
+      ...mono, 
+      fontWeight: 700, 
+      fontSize: "clamp(5rem,11vw,8.5rem)", 
+      color: COL.yellow, 
+      textShadow: "3px 3px 0 black", 
+      WebkitTextStroke: "2px black" 
+    }}>
+      GRID
+    </span>
+
+  </div>
+
+  {/* Version below */}
+  <div style={{ 
+    ...mono, 
+    fontWeight: 700, 
+    fontSize: "clamp(2.5rem,5.5vw,4.5rem)" 
+  }}>
+    1.0
+  </div>
+
+</div>
               <div style={{ borderLeft:"5px solid black", paddingLeft:"1.2rem", ...mono, fontWeight:700, fontSize:"1rem", lineHeight:1.6 }}>
                 Innovation-driven hackathon by CodeDecode Club.<br />Hardware. Software. No Limits.
               </div>
@@ -344,7 +412,7 @@ export default function OFFGRID() {
                 <NeoBtn bg={COL.white} href="#timeline">View Timeline →</NeoBtn>
               </div>
               <div style={{ ...mono, fontSize:"0.7rem", color:"#555", marginTop:"1.2rem", letterSpacing:"0.08em" }}>
-                CODE DECODE CLUB × SCHOOL OF CSE & APPLICATIONS · DY PATIL INTERNATIONAL UNIVERSITY
+                CODE DECODE CLUB × SCHOOL OF CSE & APPLICATIONS · D Y PATIL INTERNATIONAL UNIVERSITY
               </div>
             </div>
           </div>
@@ -457,7 +525,7 @@ export default function OFFGRID() {
             {[
               { Icon:CalIcon,    label:"DATES",   val:"APR 7 – APR 18\n2026",              bg:COL.yellow, fg:"black" },
               { Icon:ClockIcon,  label:"STAGES",  val:"3 ROUNDS\nIDEA → ONLINE → OFFLINE", bg:COL.white,  fg:"black" },
-              { Icon:PinIcon,    label:"VENUE",   val:"DY PATIL INTL.\nAKURDI, PUNE",      bg:"#ff4d4d",  fg:"white" },
+              { Icon:PinIcon,    label:"VENUE",   val:"D Y PATIL INTERNATIONAL\n UNIVERSITY AKURDI, PUNE",      bg:"#ff4d4d",  fg:"white" },
               { Icon:TargetIcon, label:"MODE",    val:"HARDWARE &\nSOFTWARE",              bg:"black",    fg:COL.yellow },
             ].map((c, i) => (
               <div key={i} style={{ background:c.bg, borderRight: i<3 ? "4px solid black" : "none", padding:"2rem 1.5rem" }}>
@@ -548,7 +616,7 @@ export default function OFFGRID() {
               {[
                 { Icon:FlagIcon,   date:"MAR 30 – APR 7", accent:COL.blue,  event:"IDEA PPT SUBMISSION",  desc:"Submit your idea presentation (PPT/PDF) via Unstop using the official template. Shortlist announced on 8th April." },
                 { Icon:ZapIcon,    date:"APR 9 – APR 12", accent:"#ff4d4d", event:"ONLINE EVALUATION",    desc:"10 min pitch + 5 min Q&A via video conferencing. All members must attend their assigned time slot. Shortlist announced on 13th April." },
-                { Icon:TrophyIcon, date:"APR 18",          accent:COL.green, event:"OFFLINE FINAL ROUND", desc:"DY Patil International University, Akurdi. 9:30 AM sharp. Mentor sessions, final pitch to industry experts, hi-tea, and closing ceremony." },
+                { Icon:TrophyIcon, date:"APR 18",          accent:COL.green, event:"OFFLINE FINAL ROUND", desc:"D Y Patil International University, Akurdi. 9:30 AM sharp. Mentor sessions, final pitch to industry experts, hi-tea, and closing ceremony." },
               ].map((item, i) => (
                 <div key={i} style={{ borderLeft:`6px solid ${item.accent}`, paddingLeft:"1.5rem", transition:"border-color .15s" }}
                   onMouseEnter={e => e.currentTarget.style.borderColor = "black"}
@@ -571,7 +639,7 @@ export default function OFFGRID() {
                 <div style={{ borderTop:`2px solid ${COL.yellow}`, margin:"1.5rem 0 1rem" }} />
                 <div style={{ ...mono, fontSize:"0.75rem", color:"#888", lineHeight:1.8 }}>
                   School of CSE & Applications<br />
-                  DY Patil International University<br />
+                  D Y Patil International University<br />
                   Akurdi, Pune, Maharashtra
                 </div>
                 <div style={{ marginTop:"1.5rem", display:"flex", gap:8 }}>
@@ -608,7 +676,7 @@ export default function OFFGRID() {
               <div style={{ ...mono, fontSize:"0.7rem", color:COL.yellow, letterSpacing:"0.1em", marginBottom:"1.2rem" }}>$ cat announcements.txt</div>
               <div style={{ ...mono, fontSize:"0.95rem", color:"#0f0", lineHeight:2 }}>
                 <span style={{ color:COL.yellow }}>&gt; </span>Results declaration: 25 April 2026<br />
-                <span style={{ color:COL.yellow }}>&gt; </span>Offline venue: DY Patil Intl. University, Akurdi, Pune<br />
+                <span style={{ color:COL.yellow }}>&gt; </span>Offline venue: D Y Patil Intl. University, Akurdi, Pune<br />
                 <span style={{ color:COL.yellow }}>&gt; </span>More announcements coming soon...
                 <span style={{ animation:"blink 1s step-end infinite", color:COL.yellow }}>█</span>
               </div>
@@ -640,7 +708,7 @@ export default function OFFGRID() {
               </div>
               <div style={{ ...mono, fontSize:"0.7rem", color:"#555", marginTop:"1rem", letterSpacing:"0.1em", lineHeight:1.8 }}>
                 HACKATHON 2026 —  CODE DECODE CLUB<br />
-                DY PATIL INTERNATIONAL UNIVERSITY · AKURDI, PUNE
+                D Y PATIL INTERNATIONAL UNIVERSITY · AKURDI, PUNE
               </div>
             </div>
             <div style={{ display:"flex", flexDirection:"column", alignItems:"flex-end", gap:6 }}>
@@ -656,7 +724,7 @@ export default function OFFGRID() {
           </div>
           <div style={{ borderTop:`3px solid ${COL.yellow}`, paddingTop:"1.5rem", display:"flex", flexWrap:"wrap", justifyContent:"space-between", alignItems:"center", gap:"1rem" }}>
             <div style={{ ...mono, fontSize:"0.65rem", color:"#333", letterSpacing:"0.1em" }}>
-              © 2026 CODE DECODE CLUB — DY PATIL INTERNATIONAL UNIVERSITY. ALL RIGHTS RESERVED.
+              © 2026 CODE DECODE CLUB — D Y PATIL INTERNATIONAL UNIVERSITY. ALL RIGHTS RESERVED.
             </div>
             <div style={{ display:"flex", gap:12 }}>
               {[COL.yellow, "#ff4d4d", COL.blue, COL.green, COL.pink].map(c => (
