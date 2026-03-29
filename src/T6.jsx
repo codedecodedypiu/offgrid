@@ -402,7 +402,13 @@ export default function OFFGRID() {
               <div style={{ borderLeft:"5px solid black", paddingLeft:"1.2rem", ...mono, fontWeight:700, fontSize:"1rem", lineHeight:1.6 }}>
                 Innovation-driven hackathon by CodeDecode Club.<br />Hardware. Software. No Limits.
               </div>
-             
+              <div style={{ background:COL.white, border:"4px solid black", boxShadow:"5px 5px 0 black", padding:"1.25rem 1.5rem", marginBottom:"1.5rem" }}>
+                <div style={{ ...mono, fontSize:"0.63rem", fontWeight:700, letterSpacing:"0.15em", color:"#888", marginBottom:"0.6rem", textTransform:"uppercase" }}>// About OFFGRID 1.0</div>
+                <p style={{ ...mono, fontSize:"0.84rem", lineHeight:1.75, color:"#333", margin:0 }}>
+                  A high-energy hackathon organized by <strong>CodeDecode Club</strong> &amp; School of CSE &amp; Applications at D Y Patil International University, Akurdi, Pune. Collaborate, build, and launch impactful solutions using AI, Web, Mobile, IoT, Blockchain &amp; more — hardware and software, no limits.
+                </p>
+              </div>
+
             </div>
 
             <div>
@@ -521,20 +527,61 @@ export default function OFFGRID() {
           <div style={{ ...mono, fontWeight:700, fontSize:"clamp(2rem,5vw,4rem)", lineHeight:1, textTransform:"uppercase", marginBottom:"3rem" }}>
             WHAT, WHEN<br />& WHERE
           </div>
-          <div className="details-grid" style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", border:"4px solid black" }}>
-            {[
-              { Icon:CalIcon,    label:"DATES",   val:"APR 7 – APR 18\n2026",              bg:COL.yellow, fg:"black" },
-              { Icon:ClockIcon,  label:"STAGES",  val:"3 ROUNDS\nIDEA → ONLINE → OFFLINE", bg:COL.white,  fg:"black" },
-              { Icon:PinIcon,    label:"VENUE",   val:"D Y PATIL INTERNATIONAL\n UNIVERSITY AKURDI, PUNE",      bg:"#ff4d4d",  fg:"white" },
-              { Icon:TargetIcon, label:"MODE",    val:"HARDWARE &\nSOFTWARE",              bg:"black",    fg:COL.yellow },
-            ].map((c, i) => (
-              <div key={i} style={{ background:c.bg, borderRight: i<3 ? "4px solid black" : "none", padding:"2rem 1.5rem" }}>
-                <c.Icon size={28} color={c.fg} />
-                <div style={{ ...mono, fontSize:"0.65rem", fontWeight:700, color: c.fg==="white" ? "rgba(255,255,255,0.6)" : "#888", letterSpacing:"0.15em", marginTop:"1.2rem", marginBottom:"0.5rem", textTransform:"uppercase" }}>{c.label}</div>
-                <div style={{ ...mono, fontWeight:700, fontSize:"1.15rem", color:c.fg, lineHeight:1.25, textTransform:"uppercase", whiteSpace:"pre-line" }}>{c.val}</div>
-              </div>
-            ))}
-          </div>
+         <div className="details-grid" style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", border:"4px solid black" }}>
+  {[
+    { Icon:CalIcon,    label:"DATES",   val:"APR 7 – APR 18\n2026",              bg:COL.yellow, fg:"black" },
+    { Icon:ClockIcon,  label:"STAGES",  val:"3 ROUNDS\nIDEA → ONLINE → OFFLINE", bg:COL.white,  fg:"black" },
+    { Icon:PinIcon,    label:"VENUE",   val:"D Y PATIL INTERNATIONAL\n UNIVERSITY AKURDI, PUNE", bg:"#ff4d4d",  fg:"white" },
+    { Icon:TargetIcon, label:"MODE",    val:"HARDWARE &\nSOFTWARE",              bg:"black",    fg:COL.yellow },
+  ].map((c, i) => {
+
+    const isVenue = c.label === "VENUE";
+
+    return (
+      <div 
+        key={i} 
+        onClick={() => {
+          if (isVenue) {
+            window.open("https://maps.app.goo.gl/bV5jH8xzcWLURQUE7", "_blank");
+          }
+        }}
+        style={{ 
+          background:c.bg, 
+          borderRight: i<3 ? "4px solid black" : "none", 
+          padding:"2rem 1.5rem",
+          cursor: isVenue ? "pointer" : "default"
+        }}
+      >
+        <c.Icon size={28} color={c.fg} />
+
+        <div style={{ 
+          ...mono, 
+          fontSize:"0.65rem", 
+          fontWeight:700, 
+          color: c.fg==="white" ? "rgba(255,255,255,0.6)" : "#888", 
+          letterSpacing:"0.15em", 
+          marginTop:"1.2rem", 
+          marginBottom:"0.5rem", 
+          textTransform:"uppercase" 
+        }}>
+          {c.label}
+        </div>
+
+        <div style={{ 
+          ...mono, 
+          fontWeight:700, 
+          fontSize:"1.15rem", 
+          color:c.fg, 
+          lineHeight:1.25, 
+          textTransform:"uppercase", 
+          whiteSpace:"pre-line" 
+        }}>
+          {c.val}
+        </div>
+      </div>
+    );
+  })}
+</div>
         </div>
       </section>
 
