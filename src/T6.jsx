@@ -381,7 +381,7 @@ export default function OFFGRID() {
   <div style={{ marginTop: "11rem" }}> {/* reduced from 13rem */}
     {[
       { label: "DEADLINE", val: "APR 7, 2026" },
-      { label: "VENUE", val: "DY PATIL INTERNATIONAL UNIVERSITY AKURDI" },
+      { label: "VENUE", val: "D Y PATIL INTERNATIONAL UNIVERSITY AKURDI" },
       { label: "TEAM SIZE", val: "2 – 5 MEMBERS" },
       { label: "TRACKS", val: "HARDWARE & SOFTWARE" },
     ].map((s, i) => (
@@ -455,7 +455,7 @@ export default function OFFGRID() {
           </div>
           <div className="details-grid" style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", border:"4px solid black" }}>
             {[
-              { Icon:CalIcon,    label:"DATES",   val:"APR 7 – APR 25\n2026",              bg:COL.yellow, fg:"black" },
+              { Icon:CalIcon,    label:"DATES",   val:"APR 7 – APR 18\n2026",              bg:COL.yellow, fg:"black" },
               { Icon:ClockIcon,  label:"STAGES",  val:"3 ROUNDS\nIDEA → ONLINE → OFFLINE", bg:COL.white,  fg:"black" },
               { Icon:PinIcon,    label:"VENUE",   val:"DY PATIL INTL.\nAKURDI, PUNE",      bg:"#ff4d4d",  fg:"white" },
               { Icon:TargetIcon, label:"MODE",    val:"HARDWARE &\nSOFTWARE",              bg:"black",    fg:COL.yellow },
@@ -579,11 +579,7 @@ export default function OFFGRID() {
                     <div key={c} style={{ width:14, height:14, background:c, border:"2px solid white" }} />
                   ))}
                 </div>
-                <div style={{ marginTop:"1.5rem", borderTop:"1px solid #333", paddingTop:"1rem" }}>
-                  <div style={{ ...mono, fontSize:"0.65rem", color:"#555", marginBottom:"0.5rem" }}>PRIZES UP FOR GRABS</div>
-                  <div style={{ ...mono, fontWeight:700, fontSize:"1.6rem", color:COL.yellow }}>₹20,000</div>
-                  <div style={{ ...mono, fontSize:"0.7rem", color:"#888" }}>TOP 3 TEAMS + CERTIFICATES</div>
-                </div>
+                
               </NeoCard>
             </div>
           </div>
