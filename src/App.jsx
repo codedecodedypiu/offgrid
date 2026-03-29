@@ -1,261 +1,802 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from "react";
 
-// --- Neo-Brutalism Design Constants ---
-const neoBorder = "border-4 border-black";
-const neoShadow = "shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]";
-const neoShadowHover = "hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[4px] hover:translate-y-[4px]";
-const bgColors = {
-  main: "bg-[#f0f0f0]",
-  accentYellow: "bg-[#facc15]",
-  accentPink: "bg-[#ff80bf]",
-  accentBlue: "bg-[#5d9cec]",
-  accentGreen: "bg-[#69db7c]",
-  white: "bg-white",
-  black: "bg-black"
+const COL = {
+  main: "#f0f0f0",
+  yellow: "#facc15",
+  pink: "#ff80bf",
+  blue: "#5d9cec",
+  green: "#69db7c",
+  white: "#ffffff",
+  black: "#000000",
 };
 
-// --- Inline SVG Icons (No external dependencies) ---
-const CodeIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="w-6 h-6">
-    <polyline points="16,18 22,12 16,6" />
-    <polyline points="8,6 2,12 8,18" />
+/* ─── ICONS ─── */
+const CodeIcon = ({ size = 24 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+    <polyline points="16,18 22,12 16,6" /><polyline points="8,6 2,12 8,18" />
   </svg>
 );
-
-const CalendarIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="w-16 h-16">
+const CalIcon = ({ size = 24, color = "currentColor" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="square">
     <rect x="3" y="4" width="18" height="18" rx="2" />
-    <line x1="16" y1="2" x2="16" y2="6" />
-    <line x1="8" y1="2" x2="8" y2="6" />
+    <line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" />
     <line x1="3" y1="10" x2="21" y2="10" />
   </svg>
 );
-
-const CpuIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="w-12 h-12">
-    <rect x="4" y="4" width="16" height="16" rx="2" />
-    <rect x="9" y="9" width="6" height="6" />
-    <line x1="9" y1="1" x2="9" y2="4" />
-    <line x1="15" y1="1" x2="15" y2="4" />
-    <line x1="9" y1="20" x2="9" y2="23" />
-    <line x1="15" y1="20" x2="15" y2="23" />
-    <line x1="20" y1="9" x2="23" y2="9" />
-    <line x1="20" y1="14" x2="23" y2="14" />
-    <line x1="1" y1="9" x2="4" y2="9" />
-    <line x1="1" y1="14" x2="4" y2="14" />
+const ClockIcon = ({ size = 24, color = "currentColor" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="square">
+    <circle cx="12" cy="12" r="10" /><polyline points="12,6 12,12 16,14" />
+  </svg>
+);
+const PinIcon = ({ size = 24, color = "currentColor" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="square">
+    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
+    <circle cx="12" cy="9" r="2.5" />
+  </svg>
+);
+const CpuIcon = ({ size = 40, color = "currentColor" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="square">
+    <rect x="4" y="4" width="16" height="16" /><rect x="9" y="9" width="6" height="6" />
+    <line x1="9" y1="1" x2="9" y2="4" /><line x1="15" y1="1" x2="15" y2="4" />
+    <line x1="9" y1="20" x2="9" y2="23" /><line x1="15" y1="20" x2="15" y2="23" />
+    <line x1="20" y1="9" x2="23" y2="9" /><line x1="20" y1="14" x2="23" y2="14" />
+    <line x1="1" y1="9" x2="4" y2="9" /><line x1="1" y1="14" x2="4" y2="14" />
+  </svg>
+);
+const TermIcon = ({ size = 40, color = "currentColor" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="square">
+    <rect x="2" y="3" width="20" height="18" />
+    <polyline points="8,9 12,13 8,17" /><line x1="13" y1="17" x2="21" y2="17" />
+  </svg>
+);
+const FlagIcon = ({ size = 20, color = "currentColor" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="square">
+    <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" />
+    <line x1="4" y1="22" x2="4" y2="15" />
+  </svg>
+);
+const ZapIcon = ({ size = 20, color = "currentColor" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="square">
+    <polygon points="13,2 3,14 12,14 11,22 21,10 12,10" />
+  </svg>
+);
+const TrophyIcon = ({ size = 20, color = "currentColor" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="square">
+    <path d="M7 4h10v6a5 5 0 0 1-10 0V4z" />
+    <path d="M7 9H4a3 3 0 0 1-3-3V4h6" /><path d="M17 9h3a3 3 0 0 0 3-3V4h-6" />
+    <line x1="12" y1="14" x2="12" y2="18" /><line x1="8" y1="21" x2="16" y2="21" />
+  </svg>
+);
+const HornIcon = ({ size = 28, color = "currentColor" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="square">
+    <path d="M3 11l19-9-9 19-2-8-8-2z" />
+  </svg>
+);
+const LockIcon = ({ size = 14, color = "#aaa" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="square">
+    <rect x="3" y="11" width="18" height="11" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
+  </svg>
+);
+const TargetIcon = ({ size = 24, color = "currentColor" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="square">
+    <circle cx="12" cy="12" r="10" /><circle cx="12" cy="12" r="5" />
+    <circle cx="12" cy="12" r="1" fill={color} />
+  </svg>
+);
+const ChevronIcon = ({ size = 20, color = "currentColor", open }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="3" strokeLinecap="square"
+    style={{ transform: open ? "rotate(180deg)" : "rotate(0deg)", transition: "transform .2s", flexShrink: 0 }}>
+    <polyline points="6,9 12,15 18,9" />
   </svg>
 );
 
-const AlertIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="w-10 h-10">
-    <circle cx="12" cy="12" r="10" />
-    <line x1="12" y1="8" x2="12" y2="12" />
-    <line x1="12" y1="16" x2="12.01" y2="16" />
-  </svg>
-);
-
-const PinIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="w-12 h-12">
-    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-    <circle cx="12" cy="10" r="3" />
-  </svg>
-);
-
-// --- Custom Cursor Component ---
+/* ─── CUSTOM CURSOR ─── */
 const CustomCursor = () => {
   const cursorRef = useRef(null);
-
+  const trailRef = useRef(null);
+  const [clicking, setClicking] = useState(false);
   useEffect(() => {
-    const moveCursor = (e) => {
-      if (cursorRef.current) {
-        cursorRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
-      }
+    let trailX = 0, trailY = 0, raf;
+    const move = (e) => {
+      if (cursorRef.current) cursorRef.current.style.transform = `translate(${e.clientX - 6}px,${e.clientY - 6}px)`;
+      const animate = () => {
+        trailX += (e.clientX - trailX) * 0.15;
+        trailY += (e.clientY - trailY) * 0.15;
+        if (trailRef.current) trailRef.current.style.transform = `translate(${trailX - 4}px,${trailY - 4}px)`;
+        raf = requestAnimationFrame(animate);
+      };
+      animate();
     };
-    window.addEventListener('mousemove', moveCursor);
-    return () => window.removeEventListener('mousemove', moveCursor);
+    const down = () => setClicking(true);
+    const up = () => setClicking(false);
+    window.addEventListener("mousemove", move);
+    window.addEventListener("mousedown", down);
+    window.addEventListener("mouseup", up);
+    return () => {
+      window.removeEventListener("mousemove", move);
+      window.removeEventListener("mousedown", down);
+      window.removeEventListener("mouseup", up);
+      if (raf) cancelAnimationFrame(raf);
+    };
   }, []);
-
   return (
-    <div
-      ref={cursorRef}
-      className="fixed top-0 left-0 w-8 h-8 border-4 border-black bg-[#facc15] pointer-events-none z-[9999] hidden md:block"
-      style={{ transform: 'translate3d(-100px, -100px, 0)', transition: 'transform 0.05s linear' }}
-    />
+    <>
+      <div ref={cursorRef} style={{ position: "fixed", top: 0, left: 0, width: 12, height: 12, borderRadius: "50%", border: "2px solid black", background: clicking ? "black" : "white", pointerEvents: "none", zIndex: 9999, transform: "translate(-200px,-200px)", transition: "background .1s" }} />
+      <div ref={trailRef} style={{ position: "fixed", top: 0, left: 0, width: 8, height: 8, borderRadius: "50%", background: COL.yellow, border: "1px solid black", pointerEvents: "none", zIndex: 9998, transform: "translate(-200px,-200px)", opacity: 0.8 }} />
+    </>
   );
 };
 
-// --- Reusable Neo-Button ---
-const NeoButton = ({ children, onClick, color = "bg-white" }) => (
-  <button
-    onClick={onClick}
-    className={`${color} ${neoBorder} ${neoShadow} ${neoShadowHover} px-8 py-3 font-bold text-black uppercase tracking-wider transition-all duration-200`}
-  >
-    {children}
-  </button>
-);
+/* ─── MARQUEE ─── */
+const Marquee = () => {
+  const txt = "OFFGRID 1.0   CODE DECODE CLUB   D Y PATIL INTERNATIONAL UNIVERSITY   HARDWARE   SOFTWARE   REGISTER NOW   APRIL 2026   AKURDI PUNE   ";
+  return (
+    <div style={{ background: COL.pink, borderTop: "4px solid black", borderBottom: "4px solid black", padding: "12px 0", overflow: "hidden", whiteSpace: "nowrap" }}>
+      <div style={{ display: "inline-block", animation: "marquee 28s linear infinite" }}>
+        {[txt, txt, txt].map((s, i) => (
+          <span key={i} style={{ fontFamily: "'Courier Prime',monospace", fontWeight: 700, fontSize: "0.9rem", letterSpacing: "0.12em", color: "black", textTransform: "uppercase", paddingRight: "4rem" }}>{s}</span>
+        ))}
+      </div>
+    </div>
+  );
+};
 
-// --- Reusable Card ---
-const NeoCard = ({ children, color = "bg-white", className = "" }) => (
-  <div className={`${color} ${neoBorder} ${neoShadow} p-6 ${className}`}>
+/* ─── NEO BUTTON ─── */
+const NeoBtn = ({ children, bg = COL.white, href, onClick }) => {
+  const s = { background: bg, border: "4px solid black", boxShadow: "8px 8px 0 black", fontFamily: "'Courier Prime',monospace", fontWeight: 700, fontSize: "0.85rem", letterSpacing: "0.12em", textTransform: "uppercase", padding: "12px 28px", cursor: "pointer", transition: "all .15s", color: "black", textDecoration: "none", display: "inline-block" };
+  const enter = (e) => { e.currentTarget.style.boxShadow = "4px 4px 0 black"; e.currentTarget.style.transform = "translate(4px,4px)"; };
+  const leave = (e) => { e.currentTarget.style.boxShadow = "8px 8px 0 black"; e.currentTarget.style.transform = "translate(0,0)"; };
+  if (href) return <a href={href} target="_blank" rel="noreferrer" style={s} onMouseEnter={enter} onMouseLeave={leave}>{children}</a>;
+  return <button onClick={onClick} style={s} onMouseEnter={enter} onMouseLeave={leave}>{children}</button>;
+};
+
+/* ─── NEO CARD ─── */
+const NeoCard = ({ children, bg = COL.white, rotate = "0deg", style = {} }) => (
+  <div style={{ background: bg, border: "4px solid black", boxShadow: "8px 8px 0 black", padding: "1.5rem", transform: `rotate(${rotate})`, transition: "all .15s", ...style }}
+    onMouseEnter={e => { e.currentTarget.style.boxShadow = "4px 4px 0 black"; e.currentTarget.style.transform = `rotate(${rotate}) translate(4px,4px)`; }}
+    onMouseLeave={e => { e.currentTarget.style.boxShadow = "8px 8px 0 black"; e.currentTarget.style.transform = `rotate(${rotate})`; }}>
     {children}
   </div>
 );
 
-// --- Main Application ---
-export default function HackathonSite() {
-  const [isMounted, setIsMounted] = useState(false);
+/* ─── DECO NUMBER ─── */
+const DecoNum = ({ n }) => (
+  <div style={{ position: "absolute", top: "-1rem", right: "1rem", fontFamily: "'Courier Prime',monospace", fontWeight: 700, fontSize: "clamp(5rem,12vw,9rem)", color: "black", opacity: 0.05, userSelect: "none", pointerEvents: "none", lineHeight: 1 }}>{n}</div>
+);
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+/* ─── DEADLINE BAR ─── */
+const DeadlineBar = () => {
+  const mono = { fontFamily: "'Courier Prime',monospace" };
+  const steps = [
+    { date: "APR 7", label: "PPT Submission\n& Registration", color: COL.blue },
+    { date: "APR 9", label: "Online\nEvaluation", color: COL.pink },
+    { date: "APR 18", label: "Offline\nFinal Round", color: COL.green },
+  ];
+  return (
+    <div style={{ ...mono, marginTop: "2.5rem" }}>
+      <div style={{ fontWeight: 700, fontSize: "0.72rem", letterSpacing: "0.15em", color: "#666", marginBottom: "1.2rem", textTransform: "uppercase" }}>// Important Dates</div>
+      <div style={{ display: "flex", alignItems: "flex-start" }}>
+        {steps.map((s, i) => (
+          <div key={i} style={{ display: "flex", alignItems: "flex-start", flex: 1 }}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", flex: 1 }}>
+              {/* connector row */}
+              <div style={{ display: "flex", alignItems: "center", width: "100%" }}>
+                {i > 0 && (
+                  <div style={{ flex: 1, height: 3, backgroundImage: "repeating-linear-gradient(90deg, black 0, black 6px, transparent 6px, transparent 12px)" }} />
+                )}
+                <div style={{ width: 18, height: 18, background: s.color, border: "4px solid black", flexShrink: 0, boxShadow: "2px 2px 0 black" }} />
+                {i < steps.length - 1 && (
+                  <div style={{ flex: 1, height: 3, backgroundImage: "repeating-linear-gradient(90deg, black 0, black 6px, transparent 6px, transparent 12px)" }} />
+                )}
+              </div>
+              {/* label */}
+              <div style={{ textAlign: "center", marginTop: "0.6rem", paddingRight: i < steps.length - 1 ? "8px" : 0, paddingLeft: i > 0 ? "8px" : 0 }}>
+                <div style={{ fontWeight: 700, fontSize: "0.85rem", background: s.color, border: "3px solid black", padding: "1px 8px", display: "inline-block", boxShadow: "2px 2px 0 black" }}>{s.date}</div>
+                <div style={{ fontSize: "0.68rem", color: "#555", marginTop: "0.3rem", lineHeight: 1.4, whiteSpace: "pre-line" }}>{s.label}</div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
-  if (!isMounted) return null;
+/* ─── FAQ ─── */
+const FAQ = () => {
+  const mono = { fontFamily: "'Courier Prime',monospace" };
+  const [open, setOpen] = useState(null);
+  const faqs = [
+    {
+      q: "Who can participate in OFFGRID 1.0?",
+      a: "OFFGRID 1.0 is open to undergraduate students from all colleges and universities. Inter-college teams are allowed. Each team must have 2 to 5 members."
+    },
+    {
+      q: "What is the format of the hackathon?",
+      a: "The event runs across 3 rounds: Round 1 is an online Idea Submission (PPT/PDF via Unstop). Round 2 is an Online Evaluation via video conferencing (10 min pitch + 5 min Q&A). Round 3 is an Offline Final at DYPIU Campus on 18 April 2026."
+    },
+    {
+      q: "What should our PPT submission include?",
+      a: "Your pitch deck (max 10 slides, PDF) must use the official template from the Unstop attachments section and cover: Problem Statement & Relevance, Technology Used & Integration, Sustainability & Long-Term Impact, Live Demo of Prototype, Scalability & Future Roadmap, and Business Potential & Real-World Application. Not following the template may lead to disqualification."
+    },
+    {
+      q: "What domains or themes can we work on?",
+      a: "You can build solutions under Artificial Intelligence & Emerging Technologies, Smart Cities & Urban Innovation, Sustainability & Environment, Education & Digital Learning, Healthcare & Well-being, and Blockchain, IoT & Data Science — among others. Both hardware and software projects are welcome."
+    },
+    {
+      q: "What are the prizes?",
+      a: "Cash prizes worth ₹20,000 total for the top 3 teams — 1st place ₹5,000, 2nd place ₹3,000, 3rd place ₹2,000 — along with Hardware & Software rewards. All participants receive a Participation Certificate. Prizes are released within 15 days after the event."
+    },
+    {
+      q: "What are the key rules I should know?",
+      a: "All submissions must be original — plagiarism and pre-built or copied solutions lead to disqualification. All team members must actively participate. Teams must adhere to all deadlines. Maintain professional conduct throughout the event. Organizers' decisions are final and binding."
+    },
+    {
+      q: "What happens on the offline round day (April 18)?",
+      a: "Report at DYPIU, Akurdi by 9:30 AM sharp. The day includes inauguration, general evaluation with mentor guidance, a final pitch to industry mentors at 2:00 PM (5 min pitch + 5 min Q&A), Hi-Tea & Networking at 3:30 PM, and Closing Ceremony at 4:30 PM. Results are declared on 25 April 2026."
+    },
+    {
+      q: "What if I lose my ID card at the offline event?",
+      a: "ID cards are distributed at the 9:30 AM reporting time. There is no replacement issued for lost ID cards, and loss of ID may lead to disqualification from the offline round."
+    },
+  ];
+  return (
+    <section id="faq" style={{ background: COL.white, borderBottom: "4px solid black", padding: "5rem 2.5rem", position: "relative", overflow: "hidden" }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+        <DecoNum n="06" />
+        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: "1rem" }}>
+          <div style={{ width: 32, height: 32, background: COL.yellow, border: "4px solid black", display: "flex", alignItems: "center", justifyContent: "center", ...mono, fontWeight: 700, fontSize: "1.1rem", flexShrink: 0, boxShadow: "3px 3px 0 black" }}>?</div>
+          <div style={{ ...mono, fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "#555" }}>// FAQ</div>
+        </div>
+        <div style={{ ...mono, fontWeight: 700, fontSize: "clamp(2rem,5vw,4rem)", lineHeight: 1, textTransform: "uppercase", marginBottom: "3rem" }}>
+          FREQUENTLY<br /><span style={{ background: COL.yellow, padding: "0 8px" }}>ASKED</span>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: "1rem", maxWidth: 820 }}>
+          {faqs.map((f, i) => (
+            <div key={i}
+              style={{ border: "4px solid black", background: open === i ? COL.yellow : COL.main, boxShadow: open === i ? "4px 4px 0 black" : "6px 6px 0 black", transition: "all .15s", cursor: "pointer" }}
+              onClick={() => setOpen(open === i ? null : i)}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1rem 1.25rem", gap: "1rem" }}>
+                <div style={{ ...mono, fontWeight: 700, fontSize: "0.92rem", lineHeight: 1.4 }}>{f.q}</div>
+                <ChevronIcon size={20} color="black" open={open === i} />
+              </div>
+              {open === i && (
+                <div style={{ borderTop: "3px solid black", padding: "1rem 1.25rem", ...mono, fontSize: "0.88rem", lineHeight: 1.8, color: "#333", background: COL.white }}>
+                  {f.a}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ════════════════ MAIN ════════════════ */
+export default function OFFGRID() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
+
+  const mono = { fontFamily: "'Courier Prime',monospace" };
 
   return (
-    <div className={`min-h-screen ${bgColors.main} font-mono text-black selection:bg-black selection:text-white overflow-x-hidden`}>
+    <div style={{ minHeight: "100vh", background: COL.main, fontFamily: "'Courier Prime',monospace", color: "black", overflowX: "hidden" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap');
+        @keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-33.33%)} }
+        @keyframes blink { 0%,49%,100%{opacity:1} 50%,99%{opacity:0} }
+        @keyframes pulse-bar { 0%,100%{width:40%} 50%{width:75%} }
+        * { box-sizing: border-box; }
+        ::selection { background:black; color:white; }
+        @media (max-width: 768px) {
+          .hero-grid { grid-template-columns: 1fr !important; }
+          .hero-right { border-right: none !important; border-bottom: 4px solid black !important; }
+          .details-grid { grid-template-columns: repeat(2,1fr) !important; }
+          .details-grid > div:nth-child(2n) { border-right: none !important; }
+          .details-grid > div:nth-child(n+3) { border-top: 4px solid black; }
+          .tracks-grid { grid-template-columns: 1fr !important; }
+          .tl-grid { grid-template-columns: 1fr !important; }
+          .prize-grid { grid-template-columns: 1fr !important; }
+          .prize-grid > div { border-right: none !important; border-bottom: 4px solid #facc15; }
+          .prize-grid > div:last-child { border-bottom: none !important; }
+          .nav-links { display: none !important; }
+        }
+      `}</style>
+
       <CustomCursor />
-      
-      {/* --- Navbar --- */}
-      <nav className={`${bgColors.white} ${neoBorder} border-t-0 border-x-0 p-4 sticky top-0 z-50`}>
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <div className={`w-10 h-10 ${bgColors.accentPink} ${neoBorder} flex items-center justify-center`}>
-              <CodeIcon />
+
+      {/* ══ NAVBAR ══ */}
+      <nav style={{ background: COL.white, borderBottom: "4px solid black", padding: "0 1.5rem", position: "sticky", top: 0, zIndex: 100 }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 0" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <div style={{ width: 40, height: 40, background: COL.pink, border: "4px solid black", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <CodeIcon size={20} />
             </div>
             <div>
-              <h1 className="font-bold text-xl leading-none">CODE DECODE</h1>
-              <p className="text-xs font-bold">CLUB</p>
+              <div style={{ ...mono, fontWeight: 700, fontSize: "1rem", lineHeight: 1, textTransform: "uppercase" }}>CODE DECODE</div>
+              <div style={{ ...mono, fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.1em", textTransform: "uppercase" }}>CLUB · DYPIU</div>
             </div>
           </div>
-          <div className="hidden md:flex gap-4">
-            <span className="font-bold bg-black text-white px-2 py-1">DYPIU</span>
-            <span className="font-bold">EST. 2024</span>
-          </div>
+          <nav className="nav-links" style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            {["ABOUT", "TRACKS", "TIMELINE", "FAQ", "REGISTER"].map(n => (
+              <a
+                key={n}
+                href={n === "REGISTER"
+                  ? "https://unstop.com/p/offgrid-10-codedecode-dypiu-1666935"
+                  : `#${n.toLowerCase()}`
+                }
+                target={n === "REGISTER" ? "_blank" : "_self"}
+                rel={n === "REGISTER" ? "noopener noreferrer" : ""}
+
+                style={{
+                  ...mono,
+                  fontWeight: 700,
+                  fontSize: "0.7rem",
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  textDecoration: "none",
+                  padding: "6px 14px",
+                  border: "3px solid black",
+                  background: COL.white,
+                  boxShadow: "3px 3px 0 black",
+                  color: "black",
+                  transition: "all .1s"
+                }}
+
+                onMouseEnter={e => {
+                  e.currentTarget.style.background = COL.yellow;
+                  e.currentTarget.style.transform = "translate(-2px,-2px)";
+                  e.currentTarget.style.boxShadow = "5px 5px 0 black";
+                }}
+
+                onMouseLeave={e => {
+                  e.currentTarget.style.background = COL.white;
+                  e.currentTarget.style.transform = "translate(0,0)";
+                  e.currentTarget.style.boxShadow = "3px 3px 0 black";
+                }}
+              >
+                {n}
+              </a>
+            ))}
+          </nav>
         </div>
       </nav>
 
-      {/* --- Hero Section --- */}
-      <header className="max-w-7xl mx-auto px-4 py-12 md:py-20">
-        <div className="grid md:grid-cols-2 gap-8 items-center">
-          <div className="space-y-6">
-            <div className={`inline-block ${bgColors.accentGreen} ${neoBorder} px-4 py-1 font-bold text-sm ${neoShadow}`}>
-              🚀 MORE ANNOUNCEMENTS COMING SOON
+      {/* ══ HERO ══ */}
+      <header id="about" style={{ borderBottom: "4px solid black" }}>
+        <div className="hero-grid" style={{ maxWidth: 1200, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1fr", minHeight: "88vh" }}>
+
+          {/* LEFT */}
+          <div className="hero-right" style={{ padding: "3.5rem 2.5rem", borderRight: "4px solid black", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+            <div>
+              <div style={{ display: "inline-block", background: COL.green, border: "4px solid black", boxShadow: "5px 5px 0 black", padding: "4px 16px", ...mono, fontWeight: 700, fontSize: "0.72rem", letterSpacing: "0.15em", textTransform: "uppercase", marginBottom: "2rem" }}>
+                🚀 REGISTRATIONS OPEN — DEADLINE APR 7
+              </div>
+              <div style={{
+                lineHeight: 0.85,
+                letterSpacing: "-0.02em",
+                textTransform: "uppercase",
+                marginBottom: "1.5rem"
+              }}>
+
+                {/* OFF + GRID same line */}
+                <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+
+                  <span style={{
+                    ...mono,
+                    fontWeight: 700,
+                    fontSize: "clamp(5rem,11vw,8.5rem)"
+                  }}>
+                    OFF
+                  </span>
+
+                  <span style={{
+                    ...mono,
+                    fontWeight: 700,
+                    fontSize: "clamp(5rem,11vw,8.5rem)",
+                    color: COL.yellow,
+                    textShadow: "3px 3px 0 black",
+                    WebkitTextStroke: "2px black"
+                  }}>
+                    GRID
+                  </span>
+
+                </div>
+
+                {/* Version below */}
+                <div style={{
+                  ...mono,
+                  fontWeight: 700,
+                  fontSize: "clamp(2.5rem,5.5vw,4.5rem)"
+                }}>
+                  1.0
+                </div>
+
+              </div>
+              <div style={{ borderLeft: "5px solid black", paddingLeft: "1.2rem", ...mono, fontWeight: 700, fontSize: "1rem", lineHeight: 1.6 }}>
+                Innovation-driven hackathon by CodeDecode Club.<br />Hardware. Software. No Limits.
+              </div>
+              <div style={{ background: COL.white, border: "4px solid black", boxShadow: "5px 5px 0 black", padding: "1.25rem 1.5rem", marginBottom: "1.5rem" }}>
+                <div style={{ ...mono, fontSize: "0.63rem", fontWeight: 700, letterSpacing: "0.15em", color: "#888", marginBottom: "0.6rem", textTransform: "uppercase" }}>// About OFFGRID 1.0</div>
+                <p style={{ ...mono, fontSize: "0.84rem", lineHeight: 1.75, color: "#333", margin: 0 }}>
+                  A high-energy hackathon organized by <strong>CodeDecode Club</strong> &amp; School of CSE &amp; Applications at D Y Patil International University, Akurdi, Pune. Collaborate, build, and launch impactful solutions using AI, Web, Mobile, IoT, Blockchain &amp; more — hardware and software, no limits.
+                </p>
+              </div>
+
             </div>
-            <h1 className="text-6xl md:text-8xl font-black uppercase leading-[0.85] tracking-tighter">
-              OPEN <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600" style={{ WebkitTextStroke: '2px black', textShadow: '2px 2px 0 black' }}>VISION</span> <br />
-              HACK
-            </h1>
-            <p className="text-xl font-bold max-w-md border-l-4 border-black pl-4">
-              24 Hours of Pure Innovation. Hardware & Software. No Limits.
-            </p>
-            
-            <div className="flex flex-wrap gap-4 pt-4">
-              <NeoButton color={bgColors.accentYellow}>Register Now</NeoButton>
-              <NeoButton color={bgColors.white}>View Rules</NeoButton>
+
+            <div>
+              <div style={{ borderTop: "4px solid black", margin: "2.5rem 0 1.5rem" }} />
+              <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+                <NeoBtn bg={COL.yellow} href="https://unstop.com/p/offgrid-10-codedecode-dypiu-1666935">Register Now →</NeoBtn>
+                <NeoBtn bg={COL.white} href="#timeline">View Timeline →</NeoBtn>
+              </div>
+              <div style={{ ...mono, fontSize: "0.7rem", color: "#555", marginTop: "1.2rem", letterSpacing: "0.08em" }}>
+                CODE DECODE CLUB × SCHOOL OF CSE & APPLICATIONS · D Y PATIL INTERNATIONAL UNIVERSITY
+              </div>
             </div>
           </div>
 
-          {/* Hero Visual */}
-          <div className="relative">
-            <div className={`absolute inset-0 ${bgColors.accentBlue} ${neoBorder} ${neoShadow} translate-x-4 translate-y-4`}></div>
-            <div className={`relative ${bgColors.white} ${neoBorder} p-8 h-full flex flex-col justify-center items-center text-center`}>
-              <CalendarIcon />
-              <h3 className="text-4xl font-black mt-4">APRIL 4-5</h3>
-              <p className="text-xl font-bold mt-2">24 HOURS NON-STOP</p>
-              <div className="mt-6 w-full h-4 bg-black relative overflow-hidden">
-                <div className="absolute top-0 left-0 h-full bg-[#facc15] w-2/3 animate-pulse"></div>
+          {/* RIGHT */}
+          <div style={{
+            padding: "3rem 2.5rem", // slightly reduced
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            position: "relative",
+            gap: "1.5rem" // 🔥 add gap between sections
+          }}>
+
+            {/* Floating badge */}
+            <div style={{
+              position: "absolute",
+              top: "2rem",
+              right: "2rem",
+              background: "#ff4d4d",
+              border: "5px solid black",
+              padding: "1.2rem 1.5rem",
+              textAlign: "center",
+              transform: "rotate(4deg)",
+              boxShadow: `5px 5px 0 ${COL.yellow}`,
+              zIndex: 5
+            }}>
+              <div style={{ ...mono, fontWeight: 700, fontSize: "3.5rem", color: "white", lineHeight: 1 }}>3</div>
+              <div style={{ ...mono, fontWeight: 700, fontSize: "1.2rem", color: COL.yellow }}>STAGES</div>
+              <div style={{ ...mono, fontSize: "0.6rem", color: "white", marginTop: 4 }}>MULTI-ROUND</div>
+            </div>
+
+            {/* Info Section */}
+            <div style={{ marginTop: "11rem" }}> {/* reduced from 13rem */}
+              {[
+                { label: "DEADLINE", val: "APR 7, 2026" },
+                { label: "VENUE", val: "D Y PATIL INTERNATIONAL UNIVERSITY AKURDI" },
+                { label: "TEAM SIZE", val: "2 – 5 MEMBERS" },
+                { label: "TRACKS", val: "HARDWARE & SOFTWARE" },
+              ].map((s, i) => (
+                <div key={i} style={{
+                  borderTop: i === 0 ? "4px solid black" : "1px solid #ccc",
+                  padding: "0.9rem 0", // slightly tighter
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "baseline"
+                }}>
+                  <span style={{ ...mono, fontSize: "0.65rem", color: "#666", letterSpacing: "0.15em" }}>
+                    {s.label}
+                  </span>
+                  <span style={{ ...mono, fontWeight: 700, fontSize: "1rem" }}>
+                    {s.val}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            {/* Timeline + Loading */}
+            <div style={{
+              ...mono,
+              fontSize: "0.65rem",
+              color: "#555",
+              letterSpacing: "0.1em",
+              marginTop: "1rem"
+            }}>
+
+              {/* Timeline spacing fix */}
+              <div style={{ marginBottom: "1.5rem" }}>
+                <DeadlineBar />
               </div>
-              <p className="text-xs mt-2 font-bold">LOADING ENERGY...</p>
+
+              {/* Loading */}
+              <div style={{ marginTop: "0.5rem" }}>
+                <div style={{ marginBottom: 6 }}>
+                  INNOVATION ENERGY LOADING...
+                </div>
+
+                <div style={{
+                  width: "100%",
+                  height: 12,
+                  background: "white",
+                  border: "3px solid black",
+                  overflow: "hidden"
+                }}>
+                  <div style={{
+                    height: "100%",
+                    background: COL.yellow,
+                    animation: "pulse-bar 2s ease-in-out infinite"
+                  }} />
+                </div>
+              </div>
+
             </div>
           </div>
         </div>
       </header>
 
-      {/* --- Marquee --- */}
-      <div className={`${bgColors.accentPink} ${neoBorder} border-x-0 py-4 overflow-hidden whitespace-nowrap`}>
-        <div className="animate-marquee inline-block font-black text-2xl uppercase">
-          Hardware • Software • Open Vision • 24 Hours • DYPIU • Code Decode Club • Hardware • Software • Open Vision • 24 Hours • DYPIU • Code Decode Club • 
-        </div>
-      </div>
+      {/* ══ MARQUEE ══ */}
+      <Marquee />
 
-      {/* --- Details Grid --- */}
-      <section className="max-w-7xl mx-auto px-4 py-20">
-        <h2 className="text-4xl font-black mb-12 uppercase text-center">Mission Parameters</h2>
-        
-        <div className="grid md:grid-cols-3 gap-8">
-          <NeoCard color={bgColors.accentBlue} className="transform rotate-1">
-            <CpuIcon />
-            <h3 className="text-2xl font-black mb-2 mt-4">HARDWARE</h3>
-            <p className="font-bold">Build physical prototypes. IoT, Robotics, Embedded Systems.</p>
-          </NeoCard>
+      {/* ══ EVENT DETAILS ══ */}
+      <section style={{ background: COL.white, borderBottom: "4px solid black", padding: "5rem 2.5rem", position: "relative", overflow: "hidden" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <DecoNum n="01" />
+          <div style={{ ...mono, fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", marginBottom: "1rem", color: "#555" }}>// EVENT DETAILS</div>
+          <div style={{ ...mono, fontWeight: 700, fontSize: "clamp(2rem,5vw,4rem)", lineHeight: 1, textTransform: "uppercase", marginBottom: "3rem" }}>
+            WHAT, WHEN<br />& WHERE
+          </div>
+          <div className="details-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", border: "4px solid black" }}>
+            {[
+              { Icon: CalIcon, label: "DATES", val: "APR 7 – APR 18\n2026", bg: COL.yellow, fg: "black" },
+              { Icon: ClockIcon, label: "STAGES", val: "3 ROUNDS\nIDEA → ONLINE → OFFLINE", bg: COL.white, fg: "black" },
+              { Icon: PinIcon, label: "VENUE", val: "D Y PATIL INTERNATIONAL\n UNIVERSITY AKURDI, PUNE", bg: "#ff4d4d", fg: "white" },
+              { Icon: TargetIcon, label: "MODE", val: "HARDWARE &\nSOFTWARE", bg: "black", fg: COL.yellow },
+            ].map((c, i) => {
 
-          <NeoCard color={bgColors.accentYellow} className="transform -rotate-1">
-            <CodeIcon />
-            <h3 className="text-2xl font-black mb-2 mt-4">SOFTWARE</h3>
-            <p className="font-bold">Web, App, AI/ML. Solve real-world problems with code.</p>
-          </NeoCard>
+              const isVenue = c.label === "VENUE";
 
-          <NeoCard color={bgColors.accentGreen} className="transform rotate-1">
-            <PinIcon />
-            <h3 className="text-2xl font-black mb-2 mt-4">LOCATION</h3>
-            <p className="font-bold">DY Patil International University (DYPIU). Offline Event.</p>
-          </NeoCard>
+              return (
+                <div
+                  key={i}
+                  onClick={() => {
+                    if (isVenue) {
+                      window.open("https://maps.app.goo.gl/bV5jH8xzcWLURQUE7", "_blank");
+                    }
+                  }}
+                  style={{
+                    background: c.bg,
+                    borderRight: i < 3 ? "4px solid black" : "none",
+                    padding: "2rem 1.5rem",
+                    cursor: isVenue ? "pointer" : "default"
+                  }}
+                >
+                  <c.Icon size={28} color={c.fg} />
+
+                  <div style={{
+                    ...mono,
+                    fontSize: "0.65rem",
+                    fontWeight: 700,
+                    color: c.fg === "white" ? "rgba(255,255,255,0.6)" : "#888",
+                    letterSpacing: "0.15em",
+                    marginTop: "1.2rem",
+                    marginBottom: "0.5rem",
+                    textTransform: "uppercase"
+                  }}>
+                    {c.label}
+                  </div>
+
+                  <div style={{
+                    ...mono,
+                    fontWeight: 700,
+                    fontSize: "1.15rem",
+                    color: c.fg,
+                    lineHeight: 1.25,
+                    textTransform: "uppercase",
+                    whiteSpace: "pre-line"
+                  }}>
+                    {c.val}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </section>
 
-      {/* --- Critical Deadline Section --- */}
-      <section className="max-w-7xl mx-auto px-4 pb-20">
-        <div className={`${bgColors.white} ${neoBorder} ${neoShadow} p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8`}>
-          <div className="flex items-center gap-4">
-            <div className={`p-4 ${bgColors.accentPink} ${neoBorder}`}>
-              <AlertIcon />
+      {/* ══ TRACKS ══ */}
+      <section id="tracks" style={{ background: COL.main, borderBottom: "4px solid black", padding: "5rem 2.5rem", position: "relative", overflow: "hidden" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <DecoNum n="02" />
+          <div style={{ ...mono, fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", marginBottom: "1rem", color: "#555" }}>// MISSION PARAMETERS</div>
+          <div style={{ ...mono, fontWeight: 700, fontSize: "clamp(2rem,5vw,4rem)", lineHeight: 1, textTransform: "uppercase", marginBottom: "3rem" }}>
+            WHAT ARE YOU<br /><span style={{ color: COL.yellow, WebkitTextStroke: "1.5px black", textShadow: "3px 3px 0 black" }}>BUILDING?</span>
+          </div>
+          <div className="tracks-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2rem" }}>
+            <NeoCard bg={COL.blue} rotate="1deg">
+              <CpuIcon size={44} color="black" />
+              <div style={{ ...mono, fontWeight: 700, fontSize: "2rem", textTransform: "uppercase", marginTop: "1rem", marginBottom: "0.5rem" }}>HARDWARE</div>
+              <div style={{ borderTop: "3px solid black", paddingTop: "0.8rem", ...mono, fontSize: "0.85rem", lineHeight: 1.7 }}>
+                Circuits, embedded systems, IoT devices, robotics, and physical computing solutions. If it has wires and a heartbeat, it belongs here.
+              </div>
+            </NeoCard>
+            <NeoCard bg={COL.yellow} rotate="-1deg">
+              <TermIcon size={44} color="black" />
+              <div style={{ ...mono, fontWeight: 700, fontSize: "2rem", textTransform: "uppercase", marginTop: "1rem", marginBottom: "0.5rem" }}>SOFTWARE</div>
+              <div style={{ borderTop: "3px solid black", paddingTop: "0.8rem", ...mono, fontSize: "0.85rem", lineHeight: 1.7 }}>
+                Web, mobile apps, AI/ML models, data science platforms, blockchain solutions. Code that runs and solves real problems at scale.
+              </div>
+            </NeoCard>
+          </div>
+        </div>
+      </section>
+
+      {/* ══ PRIZE POOL ══ */}
+      <section style={{ background: "black", borderBottom: "4px solid black", padding: "5rem 2.5rem", position: "relative", overflow: "hidden" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <DecoNum n="03" />
+          <div style={{ ...mono, fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", marginBottom: "1rem", color: COL.yellow }}>// REWARDS</div>
+          <div style={{ ...mono, fontWeight: 700, fontSize: "clamp(2rem,5vw,4rem)", lineHeight: 1, textTransform: "uppercase", marginBottom: "3rem", color: "white" }}>
+            PRIZE<br /><span style={{ color: COL.yellow }}>POOL</span>
+          </div>
+          {/* Big total */}
+          <div style={{ border: `6px solid ${COL.yellow}`, padding: "3rem 2rem", textAlign: "center", boxShadow: `12px 12px 0 ${COL.yellow}`, marginBottom: "2.5rem", background: "#0a0a0a" }}>
+            <div style={{ ...mono, fontSize: "0.75rem", color: "#555", letterSpacing: "0.2em", marginBottom: "0.5rem", textTransform: "uppercase" }}>TOTAL CASH PRIZE POOL</div>
+            <div style={{ ...mono, fontWeight: 700, fontSize: "clamp(4.5rem,14vw,10rem)", color: COL.yellow, lineHeight: 1, letterSpacing: "-0.02em" }}>₹20,000</div>
+            <div style={{ ...mono, fontSize: "0.85rem", color: "#888", marginTop: "0.5rem", letterSpacing: "0.1em" }}>FOR THE TOP 3 TEAMS + HARDWARE & SOFTWARE REWARDS</div>
+          </div>
+          {/* Breakdown */}
+          <div className="prize-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", border: `4px solid ${COL.yellow}` }}>
+            {[
+              { place: "1ST", amt: "₹5,000", color: COL.yellow, bg: "#1a1a00" },
+              { place: "2ND", amt: "₹3,000", color: "#d4d4d4", bg: "#111" },
+              { place: "3RD", amt: "₹2,000", color: "#cd7f32", bg: "#0f0a00" },
+            ].map((p, i) => (
+              <div key={i} style={{ padding: "2.5rem 1.5rem", textAlign: "center", background: p.bg, borderRight: i < 2 ? `4px solid ${COL.yellow}` : "none" }}>
+                <div style={{ ...mono, fontSize: "0.7rem", color: "#666", letterSpacing: "0.2em", marginBottom: "0.75rem" }}>{p.place} PLACE</div>
+                <div style={{ ...mono, fontWeight: 700, fontSize: "clamp(2rem,5vw,3.5rem)", color: p.color, lineHeight: 1 }}>{p.amt}</div>
+                <div style={{ ...mono, fontSize: "0.7rem", color: "#666", marginTop: "0.75rem", letterSpacing: "0.1em" }}>CASH + HW/SW GOODIES</div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: "2rem", display: "flex", flexWrap: "wrap", gap: "1.5rem", alignItems: "center" }}>
+            <div style={{ ...mono, fontSize: "0.8rem", color: "#888", flex: 1, lineHeight: 1.9 }}>
+              🏆 All participants receive a Participation Certificate.<br />
+              💡 Prizes released within 15 days after the event.
+            </div>
+            <NeoBtn bg={COL.yellow} href="https://unstop.com/p/offgrid-10-codedecode-dypiu-1666935">Register Now →</NeoBtn>
+          </div>
+        </div>
+      </section>
+
+      {/* ══ TIMELINE ══ */}
+      <section id="timeline" style={{ background: COL.white, borderBottom: "4px solid black", padding: "5rem 2.5rem", position: "relative", overflow: "hidden" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <DecoNum n="04" />
+          <div style={{ ...mono, fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", marginBottom: "1rem", color: "#555" }}>// THE ROADMAP</div>
+          <div style={{ ...mono, fontWeight: 700, fontSize: "clamp(2rem,5vw,4rem)", lineHeight: 1, textTransform: "uppercase", marginBottom: "3.5rem" }}>
+            KEY DATES &<br />MILESTONES
+          </div>
+          <div className="tl-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4rem" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+              {[
+                { Icon: FlagIcon, date: "MAR 30 – APR 7", accent: COL.blue, event: "IDEA PPT SUBMISSION", desc: "Submit your idea presentation (PPT/PDF) via Unstop using the official template. Shortlist announced on 8th April." },
+                { Icon: ZapIcon, date: "APR 9 – APR 12", accent: "#ff4d4d", event: "ONLINE EVALUATION", desc: "10 min pitch + 5 min Q&A via video conferencing. All members must attend their assigned time slot. Shortlist announced on 13th April." },
+                { Icon: TrophyIcon, date: "APR 18", accent: COL.green, event: "OFFLINE FINAL ROUND", desc: "D Y Patil International University, Akurdi. 9:30 AM sharp. Mentor sessions, final pitch to industry experts, hi-tea, and closing ceremony." },
+              ].map((item, i) => (
+                <div key={i} style={{ borderLeft: `6px solid ${item.accent}`, paddingLeft: "1.5rem", transition: "border-color .15s" }}
+                  onMouseEnter={e => e.currentTarget.style.borderColor = "black"}
+                  onMouseLeave={e => e.currentTarget.style.borderColor = item.accent}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: "0.5rem" }}>
+                    <item.Icon size={20} color={item.accent} />
+                    <span style={{ ...mono, fontSize: "0.7rem", fontWeight: 700, color: item.accent, letterSpacing: "0.15em" }}>{item.date}</span>
+                  </div>
+                  <div style={{ ...mono, fontWeight: 700, fontSize: "1.4rem", textTransform: "uppercase", lineHeight: 1, letterSpacing: "0.02em", marginBottom: "0.4rem" }}>{item.event}</div>
+                  <div style={{ ...mono, fontSize: "0.82rem", color: "#555", lineHeight: 1.7 }}>{item.desc}</div>
+                </div>
+              ))}
             </div>
             <div>
-              <h2 className="text-3xl md:text-4xl font-black uppercase">PPT Submission</h2>
-              <p className="font-bold text-lg">Initial Idea Pitch Deck</p>
+              <NeoCard bg="black" style={{ height: "fit-content" }}>
+                <div style={{ ...mono, fontSize: "0.65rem", color: COL.yellow, letterSpacing: "0.2em", marginBottom: "1.5rem", textTransform: "uppercase" }}>// Organized By</div>
+                <div style={{ ...mono, fontWeight: 700, fontSize: "2.2rem", color: "white", lineHeight: 1, textTransform: "uppercase", marginBottom: "1rem" }}>
+                  CODE<br />DECODE<br />CLUB
+                </div>
+                <div style={{ borderTop: `2px solid ${COL.yellow}`, margin: "1.5rem 0 1rem" }} />
+                <div style={{ ...mono, fontSize: "0.75rem", color: "#888", lineHeight: 1.8 }}>
+                  School of CSE & Applications<br />
+                  D Y Patil International University<br />
+                  Akurdi, Pune, Maharashtra
+                </div>
+                <div style={{ marginTop: "1.5rem", display: "flex", gap: 8 }}>
+                  {[COL.yellow, "#ff4d4d", COL.blue, COL.green].map(c => (
+                    <div key={c} style={{ width: 14, height: 14, background: c, border: "2px solid white" }} />
+                  ))}
+                </div>
+
+              </NeoCard>
             </div>
-          </div>
-          
-          <div className="text-center md:text-right">
-            <div className="text-5xl font-black bg-black text-white inline-block px-4 py-2">
-              15-18 MARCH
-            </div>
-            <p className="mt-2 font-bold uppercase">Deadline Strict</p>
           </div>
         </div>
       </section>
 
-      {/* --- Footer --- */}
-      <footer className={`${bgColors.black} text-white ${neoBorder} border-t-0 border-x-0 border-b-0 mt-12`}>
-        <div className="max-w-7xl mx-auto px-4 py-12 grid md:grid-cols-2 gap-8">
-          <div>
-            <h2 className="text-3xl font-black mb-4">DYPIU</h2>
-            <p className="font-mono opacity-80">DY Patil International University</p>
-            <p className="font-mono opacity-80">Pune, India</p>
+      {/* ══ ANNOUNCEMENTS ══ */}
+      <section id="register" style={{ background: COL.main, borderBottom: "4px solid black", padding: "5rem 2.5rem", position: "relative", overflow: "hidden" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <DecoNum n="05" />
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: "1rem" }}>
+            <HornIcon size={28} color="black" />
+            <div style={{ ...mono, fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "#555" }}>// ANNOUNCEMENTS</div>
           </div>
-          <div className="flex flex-col items-start md:items-end justify-center">
-            <h3 className="text-xl font-bold mb-2">ORGANIZED BY</h3>
-            <div className={`px-6 py-3 ${bgColors.accentYellow} text-black ${neoBorder} font-black text-xl`}>
-              CODE DECODE CLUB
+          <div style={{ ...mono, fontWeight: 700, fontSize: "clamp(2rem,5vw,4rem)", lineHeight: 1, textTransform: "uppercase", marginBottom: "3rem" }}>
+            BULLETIN<br /><span style={{ background: COL.pink, padding: "0 8px" }}>BOARD</span>
+          </div>
+          <div style={{ border: "4px solid black", maxWidth: 700, background: "black", boxShadow: "8px 8px 0 black" }}>
+            <div style={{ background: COL.yellow, padding: "8px 16px", display: "flex", alignItems: "center", gap: 8, borderBottom: "3px solid black" }}>
+              {["#ff5f57", "#febc2e", "#28c840"].map(c => (
+                <div key={c} style={{ width: 12, height: 12, background: c, borderRadius: "50%", border: "1px solid rgba(0,0,0,.2)" }} />
+              ))}
+              <span style={{ ...mono, fontWeight: 700, fontSize: "0.7rem", color: "black", marginLeft: 8, letterSpacing: "0.1em" }}>LIVE-FEED.sh — OFFGRID 1.0</span>
+            </div>
+            <div style={{ padding: "2rem" }}>
+              <div style={{ ...mono, fontSize: "0.7rem", color: COL.yellow, letterSpacing: "0.1em", marginBottom: "1.2rem" }}>$ cat announcements.txt</div>
+              <div style={{ ...mono, fontSize: "0.95rem", color: "#0f0", lineHeight: 2 }}>
+                <span style={{ color: COL.yellow }}>&gt; </span>Results declaration: 25 April 2026<br />
+                <span style={{ color: COL.yellow }}>&gt; </span>Offline venue: D Y Patil Intl. University, Akurdi, Pune<br />
+                <span style={{ color: COL.yellow }}>&gt; </span>More announcements coming soon...
+                <span style={{ animation: "blink 1s step-end infinite", color: COL.yellow }}>█</span>
+              </div>
+              <div style={{ marginTop: "1.5rem", display: "flex", flexDirection: "column", gap: 8 }}>
+                {[1, 2].map(i => (
+                  <div key={i} style={{ borderLeft: "3px solid #333", paddingLeft: "1rem", display: "flex", alignItems: "center", gap: 8 }}>
+                    <LockIcon size={14} color="#555" />
+                    <span style={{ ...mono, fontSize: "0.78rem", color: "#444", letterSpacing: "0.05em" }}>
+                      &gt; ??? _________________________ [LOCKED]
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
-        <div className="border-t border-white/20 p-4 text-center font-mono text-sm">
-          © 2024 OPEN VISION HACKATHON. ALL RIGHTS RESERVED.
+      </section>
+
+      {/* ══ FAQ ══ */}
+      <FAQ />
+
+      {/* ══ FOOTER ══ */}
+      <footer style={{ background: "black", borderTop: "4px solid black", padding: "4rem 2.5rem" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "flex-end", gap: "2rem", marginBottom: "2rem" }}>
+            <div>
+              <div style={{ ...mono, fontWeight: 700, fontSize: "clamp(1.8rem,4vw,3.5rem)", color: COL.yellow, textTransform: "uppercase", lineHeight: 1 }}>
+                OFFGRID 1.0
+              </div>
+              <div style={{ ...mono, fontSize: "0.7rem", color: "#555", marginTop: "1rem", letterSpacing: "0.1em", lineHeight: 1.8 }}>
+                HACKATHON 2026 —  CODE DECODE CLUB<br />
+                D Y PATIL INTERNATIONAL UNIVERSITY · AKURDI, PUNE
+              </div>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
+              {["ABOUT", "TRACKS", "TIMELINE", "FAQ", "REGISTER"].map(n => (
+                <a key={n} href={`#${n.toLowerCase()}`}
+                  style={{ ...mono, fontSize: "0.7rem", color: "#555", textDecoration: "none", letterSpacing: "0.12em", textTransform: "uppercase", transition: "color .1s" }}
+                  onMouseEnter={e => e.currentTarget.style.color = COL.yellow}
+                  onMouseLeave={e => e.currentTarget.style.color = "#555"}>
+                  {n}
+                </a>
+              ))}
+            </div>
+          </div>
+          <div style={{ borderTop: `3px solid ${COL.yellow}`, paddingTop: "1.5rem", display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: "1rem" }}>
+            <div style={{ ...mono, fontSize: "0.65rem", color: "#333", letterSpacing: "0.1em" }}>
+              © 2026 CODE DECODE CLUB — D Y PATIL INTERNATIONAL UNIVERSITY. ALL RIGHTS RESERVED.
+            </div>
+            <div style={{ display: "flex", gap: 12 }}>
+              {[COL.yellow, "#ff4d4d", COL.blue, COL.green, COL.pink].map(c => (
+                <div key={c} style={{ width: 10, height: 10, background: c, border: "2px solid #333" }} />
+              ))}
+            </div>
+          </div>
         </div>
       </footer>
-
-      {/* --- Tailwind Custom Animation Style --- */}
-      <style>{`
-        @keyframes marquee {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-        .animate-marquee {
-          animation: marquee 20s linear infinite;
-        }
-      `}</style>
     </div>
   );
 }
