@@ -311,9 +311,11 @@ export default function OFFGRID() {
       <nav style={{ background: COL.white, borderBottom: "4px solid black", padding: "0 1.5rem", position: "sticky", top: 0, zIndex: 100 }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 0" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <div style={{ width: 40, height: 40, background: COL.pink, border: "4px solid black", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <CodeIcon size={20} />
-            </div>
+            <img 
+              src="/cdc_logo.png" 
+              alt="CDC Logo" 
+              style={{ height: 45, width: "auto", objectFit: "contain" }} 
+            />
             <div>
               <div style={{ ...mono, fontWeight: 700, fontSize: "1rem", lineHeight: 1, textTransform: "uppercase" }}>CODE DECODE</div>
               <div style={{ ...mono, fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.1em", textTransform: "uppercase" }}>CLUB · DYPIU</div>
